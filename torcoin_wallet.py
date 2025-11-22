@@ -18,11 +18,8 @@ import webbrowser
 class TorCOINWallet:
     def __init__(self, root):
         self.root = root
-        self.root.title("TorCOIN Wallet v1.0")
-        self.root.geometry("1000x700")
-        self.root.minsize(800, 600)
 
-        # Wallet data
+        # Wallet data (initialize early for color access)
         self.wallet_data = {
             "address": "",
             "private_key": "",
@@ -38,8 +35,16 @@ class TorCOINWallet:
         # Load wallet if exists
         self.load_wallet()
 
-        # Create GUI
+        # Create GUI styles first
         self.create_styles()
+
+        # Configure root window for dark chrome theme
+        self.root.title("TorCOIN Wallet v1.1.0 - Dark Chrome 3D Edition")
+        self.root.geometry("1100x750")
+        self.root.minsize(900, 650)
+        self.root.configure(bg=self.colors['bg_primary'])
+
+        # Create GUI components
         self.create_menu()
         self.create_status_bar()
         self.create_main_interface()
@@ -51,99 +56,150 @@ class TorCOINWallet:
         self.start_balance_updates()
 
     def create_styles(self):
-        """Create custom styles for the application."""
+        """Create custom styles for the application with 3D dark chrome theme."""
         style = ttk.Style()
 
-        # Configure colors for dark theme
+        # Configure colors for dark chrome theme with deep blue/red accents
         self.colors = {
-            'bg_primary': '#0f172a',
-            'bg_secondary': '#1e293b',
-            'bg_tertiary': '#334155',
-            'accent': '#FFD700',
-            'text_primary': '#f8fafc',
-            'text_secondary': '#cbd5e1',
-            'success': '#10b981',
-            'warning': '#f59e0b',
-            'error': '#ef4444',
-            'border': '#475569'
+            'bg_primary': '#0a0a0a',      # Deep black background
+            'bg_secondary': '#1a1a2a',    # Dark blue-black
+            'bg_tertiary': '#2a2a3a',     # Medium dark chrome
+            'bg_panel': '#1a1a1a',        # Panel backgrounds
+            'accent_primary': '#FF0066', # Deep red accent
+            'accent_secondary': '#00BFFF', # Deep blue accent
+            'accent_gold': '#FFD700',    # Gold for highlights
+            'text_primary': '#ffffff',   # Pure white text
+            'text_secondary': '#cccccc', # Light gray text
+            'text_muted': '#888888',     # Muted gray text
+            'border_primary': '#333333', # Dark borders
+            'border_accent': '#FF0066',  # Red accent borders
+            'success': '#00FF88',        # Bright green
+            'warning': '#FFAA00',        # Orange warning
+            'error': '#FF4444',          # Bright red error
+            'glow_primary': '#FF0066',   # Red glow
+            'glow_secondary': '#00BFFF', # Blue glow
         }
 
-        # Button styles
+        # Custom button styles with 3D effects
         style.configure('Accent.TButton',
-                       background=self.colors['accent'],
-                       foreground=self.colors['bg_primary'],
+                       background=self.colors['accent_primary'],
+                       foreground=self.colors['text_primary'],
                        font=('Segoe UI', 10, 'bold'),
-                       padding=10)
+                       padding=12,
+                       relief='raised',
+                       borderwidth=2)
+
+        style.map('Accent.TButton',
+                 background=[('active', self.colors['accent_secondary']),
+                           ('pressed', self.colors['bg_tertiary'])],
+                 relief=[('pressed', 'sunken')])
 
         style.configure('Primary.TButton',
-                       background=self.colors['bg_secondary'],
+                       background=self.colors['bg_tertiary'],
                        foreground=self.colors['text_primary'],
-                       font=('Segoe UI', 9))
+                       font=('Segoe UI', 9, 'bold'),
+                       padding=8,
+                       relief='raised')
+
+        style.map('Primary.TButton',
+                 background=[('active', self.colors['accent_secondary']),
+                           ('pressed', self.colors['bg_secondary'])])
 
         style.configure('Success.TButton',
                        background=self.colors['success'],
-                       foreground='white',
-                       font=('Segoe UI', 9, 'bold'))
+                       foreground=self.colors['bg_primary'],
+                       font=('Segoe UI', 9, 'bold'),
+                       padding=10,
+                       relief='raised')
 
-        # Label styles
+        style.configure('Danger.TButton',
+                       background=self.colors['error'],
+                       foreground=self.colors['text_primary'],
+                       font=('Segoe UI', 9, 'bold'),
+                       padding=10,
+                       relief='raised')
+
+        # Enhanced label styles
         style.configure('Title.TLabel',
-                       font=('Segoe UI', 24, 'bold'),
-                       foreground=self.colors['accent'])
+                       font=('Segoe UI', 28, 'bold'),
+                       foreground=self.colors['accent_primary'])
 
         style.configure('Header.TLabel',
-                       font=('Segoe UI', 16, 'bold'),
+                       font=('Segoe UI', 18, 'bold'),
                        foreground=self.colors['text_primary'])
 
         style.configure('Balance.TLabel',
-                       font=('Segoe UI', 32, 'bold'),
-                       foreground=self.colors['accent'])
+                       font=('Segoe UI', 36, 'bold'),
+                       foreground=self.colors['accent_gold'])
+
+        style.configure('Subtitle.TLabel',
+                       font=('Segoe UI', 14),
+                       foreground=self.colors['text_secondary'])
+
+        # Frame styles
+        style.configure('Card.TFrame',
+                       background=self.colors['bg_panel'],
+                       relief='raised',
+                       borderwidth=2)
+
+        style.configure('Panel.TFrame',
+                       background=self.colors['bg_secondary'],
+                       relief='groove',
+                       borderwidth=1)
 
     def create_menu(self):
-        """Create the application menu bar."""
-        menubar = tk.Menu(self.root)
+        """Create the application menu bar with dark chrome styling."""
+        menubar = tk.Menu(self.root, bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
+                         activebackground=self.colors['accent_primary'], activeforeground=self.colors['text_primary'],
+                         relief='raised', bd=2)
         self.root.config(menu=menubar)
 
         # File menu
-        file_menu = tk.Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="File", menu=file_menu)
-        file_menu.add_command(label="New Wallet", command=self.create_new_wallet)
-        file_menu.add_command(label="Open Wallet", command=self.open_wallet)
-        file_menu.add_command(label="Save Wallet", command=self.save_wallet)
+        file_menu = tk.Menu(menubar, tearoff=0, bg=self.colors['bg_panel'], fg=self.colors['text_primary'],
+                           activebackground=self.colors['accent_secondary'], activeforeground=self.colors['text_primary'])
+        menubar.add_cascade(label="💾 File", menu=file_menu)
+        file_menu.add_command(label="🆕 New Wallet", command=self.create_new_wallet)
+        file_menu.add_command(label="📂 Open Wallet", command=self.open_wallet)
+        file_menu.add_command(label="💾 Save Wallet", command=self.save_wallet)
         file_menu.add_separator()
-        file_menu.add_command(label="Backup Wallet", command=self.backup_wallet)
+        file_menu.add_command(label="🔄 Backup Wallet", command=self.backup_wallet)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", command=self.on_closing)
+        file_menu.add_command(label="🚪 Exit", command=self.on_closing)
 
         # View menu
-        view_menu = tk.Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="View", menu=view_menu)
-        view_menu.add_command(label="Dashboard", command=lambda: self.show_frame("dashboard"))
-        view_menu.add_command(label="Send", command=lambda: self.show_frame("send"))
-        view_menu.add_command(label="Receive", command=lambda: self.show_frame("receive"))
-        view_menu.add_command(label="Transactions", command=lambda: self.show_frame("transactions"))
-        view_menu.add_command(label="Settings", command=lambda: self.show_frame("settings"))
+        view_menu = tk.Menu(menubar, tearoff=0, bg=self.colors['bg_panel'], fg=self.colors['text_primary'],
+                           activebackground=self.colors['accent_secondary'], activeforeground=self.colors['text_primary'])
+        menubar.add_cascade(label="👁️ View", menu=view_menu)
+        view_menu.add_command(label="🏠 Dashboard", command=lambda: self.show_frame("dashboard"))
+        view_menu.add_command(label="📤 Send", command=lambda: self.show_frame("send"))
+        view_menu.add_command(label="📥 Receive", command=lambda: self.show_frame("receive"))
+        view_menu.add_command(label="📊 Transactions", command=lambda: self.show_frame("transactions"))
+        view_menu.add_command(label="⚙️ Settings", command=lambda: self.show_frame("settings"))
 
         # Tools menu
-        tools_menu = tk.Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="Tools", menu=tools_menu)
-        tools_menu.add_command(label="Address Book", command=self.show_address_book)
-        tools_menu.add_command(label="Price Calculator", command=self.show_price_calculator)
+        tools_menu = tk.Menu(menubar, tearoff=0, bg=self.colors['bg_panel'], fg=self.colors['text_primary'],
+                            activebackground=self.colors['accent_secondary'], activeforeground=self.colors['text_primary'])
+        menubar.add_cascade(label="🔧 Tools", menu=tools_menu)
+        tools_menu.add_command(label="📓 Address Book", command=self.show_address_book)
+        tools_menu.add_command(label="💰 Price Calculator", command=self.show_price_calculator)
         tools_menu.add_separator()
-        tools_menu.add_command(label="Network Status", command=self.show_network_status)
+        tools_menu.add_command(label="🌐 Network Status", command=self.show_network_status)
 
         # Help menu
-        help_menu = tk.Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="Help", menu=help_menu)
-        help_menu.add_command(label="Documentation", command=self.show_documentation)
-        help_menu.add_command(label="Security Tips", command=self.show_security_tips)
+        help_menu = tk.Menu(menubar, tearoff=0, bg=self.colors['bg_panel'], fg=self.colors['text_primary'],
+                           activebackground=self.colors['accent_secondary'], activeforeground=self.colors['text_primary'])
+        menubar.add_cascade(label="❓ Help", menu=help_menu)
+        help_menu.add_command(label="📚 Documentation", command=self.show_documentation)
+        help_menu.add_command(label="🔒 Security Tips", command=self.show_security_tips)
         help_menu.add_separator()
-        help_menu.add_command(label="About TorCOIN Wallet", command=self.show_about)
+        help_menu.add_command(label="ℹ️ About TorCOIN Wallet", command=self.show_about)
 
     def create_main_interface(self):
-        """Create the main interface with different frames."""
-        # Main container
-        self.main_container = tk.Frame(self.root, bg=self.colors['bg_primary'])
-        self.main_container.pack(fill=tk.BOTH, expand=True, padx=0, pady=0)
+        """Create the main interface with different frames and 3D chrome styling."""
+        # Main container with chrome effect
+        self.main_container = tk.Frame(self.root, bg=self.colors['bg_primary'],
+                                     relief='raised', bd=3)
+        self.main_container.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         # Create frames for different views
         self.frames = {}
@@ -157,102 +213,175 @@ class TorCOINWallet:
         self.show_frame("dashboard")
 
     def create_dashboard_frame(self):
-        """Create the dashboard/main view."""
+        """Create the dashboard/main view with 3D chrome styling."""
         frame = tk.Frame(self.main_container, bg=self.colors['bg_primary'])
         self.frames["dashboard"] = frame
 
-        # Header
-        header_frame = tk.Frame(frame, bg=self.colors['bg_secondary'], height=80)
+        # Header with 3D chrome effect
+        header_frame = tk.Frame(frame, bg=self.colors['bg_secondary'],
+                               relief='raised', bd=3, height=100)
         header_frame.pack(fill=tk.X, pady=(0, 20))
         header_frame.pack_propagate(False)
 
-        title_label = ttk.Label(header_frame, text="TorCOIN Wallet", style='Title.TLabel')
-        title_label.pack(pady=20)
+        # Add gradient effect to header
+        header_canvas = tk.Canvas(header_frame, height=100, bg=self.colors['bg_secondary'],
+                                 highlightthickness=0)
+        header_canvas.pack(fill=tk.BOTH, expand=True)
 
-        # Balance section
-        balance_frame = tk.Frame(frame, bg=self.colors['bg_secondary'], relief='raised', bd=2)
-        balance_frame.pack(fill=tk.X, padx=20, pady=(0, 20))
+        # Create gradient background
+        for i in range(100):
+            color = self._blend_colors(self.colors['bg_secondary'], self.colors['bg_tertiary'], i/100)
+            header_canvas.create_line(0, i, 2000, i, fill=color)
 
-        balance_title = ttk.Label(balance_frame, text="Available Balance", style='Header.TLabel')
-        balance_title.pack(pady=(20, 10))
+        title_label = ttk.Label(header_frame, text="🪙 TorCOIN Wallet", style='Title.TLabel',
+                               background=self.colors['bg_secondary'])
+        title_label.pack(pady=25)
 
-        self.balance_label = ttk.Label(balance_frame, text=".0 TOR", style='Balance.TLabel')
-        self.balance_label.pack(pady=(0, 20))
+        # Balance section with 3D chrome effect
+        balance_frame = tk.Frame(frame, bg=self.colors['bg_panel'],
+                                relief='ridge', bd=4)
+        balance_frame.pack(fill=tk.X, padx=25, pady=(0, 20))
 
-        # Quick actions
+        # Add glow effect
+        balance_glow = tk.Frame(balance_frame, bg=self.colors['glow_primary'], height=2)
+        balance_glow.pack(fill=tk.X, side=tk.TOP)
+
+        balance_title = ttk.Label(balance_frame, text="💰 Available Balance",
+                                 style='Header.TLabel', background=self.colors['bg_panel'])
+        balance_title.pack(pady=(25, 15))
+
+        self.balance_label = ttk.Label(balance_frame, text=".2f",
+                                      style='Balance.TLabel', background=self.colors['bg_panel'])
+        self.balance_label.pack(pady=(0, 25))
+
+        # Quick actions with 3D effects
         actions_frame = tk.Frame(frame, bg=self.colors['bg_primary'])
-        actions_frame.pack(fill=tk.X, padx=20, pady=(0, 20))
+        actions_frame.pack(fill=tk.X, padx=25, pady=(0, 20))
 
-        actions_title = ttk.Label(actions_frame, text="Quick Actions", style='Header.TLabel')
-        actions_title.pack(pady=(0, 15))
+        actions_title = ttk.Label(actions_frame, text="⚡ Quick Actions", style='Header.TLabel')
+        actions_title.pack(pady=(0, 20))
 
         buttons_frame = tk.Frame(actions_frame, bg=self.colors['bg_primary'])
         buttons_frame.pack()
 
-        ttk.Button(buttons_frame, text="📤 Send TorCOIN", style='Accent.TButton',
-                  command=lambda: self.show_frame("send")).pack(side=tk.LEFT, padx=10)
-        ttk.Button(buttons_frame, text="📥 Receive TorCOIN", style='Primary.TButton',
-                  command=lambda: self.show_frame("receive")).pack(side=tk.LEFT, padx=10)
-        ttk.Button(buttons_frame, text="📊 View Transactions", style='Primary.TButton',
-                  command=lambda: self.show_frame("transactions")).pack(side=tk.LEFT, padx=10)
+        # 3D styled buttons
+        send_btn = tk.Button(buttons_frame, text="📤 Send TorCOIN",
+                           bg=self.colors['accent_primary'], fg=self.colors['text_primary'],
+                           font=('Segoe UI', 11, 'bold'), relief='raised', bd=4,
+                           activebackground=self.colors['accent_secondary'],
+                           activeforeground=self.colors['text_primary'],
+                           padx=20, pady=10, cursor='hand2',
+                           command=lambda: self.show_frame("send"))
+        send_btn.pack(side=tk.LEFT, padx=15)
+        self._add_3d_effect(send_btn)
 
-        # Recent transactions preview
-        recent_frame = tk.Frame(frame, bg=self.colors['bg_secondary'])
-        recent_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+        receive_btn = tk.Button(buttons_frame, text="📥 Receive TorCOIN",
+                              bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
+                              font=('Segoe UI', 10, 'bold'), relief='raised', bd=3,
+                              activebackground=self.colors['accent_secondary'],
+                              padx=20, pady=10, cursor='hand2',
+                              command=lambda: self.show_frame("receive"))
+        receive_btn.pack(side=tk.LEFT, padx=15)
 
-        recent_title = ttk.Label(recent_frame, text="Recent Transactions", style='Header.TLabel')
-        recent_title.pack(pady=15)
+        tx_btn = tk.Button(buttons_frame, text="📊 Transactions",
+                          bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
+                          font=('Segoe UI', 10, 'bold'), relief='raised', bd=3,
+                          activebackground=self.colors['accent_secondary'],
+                          padx=20, pady=10, cursor='hand2',
+                          command=lambda: self.show_frame("transactions"))
+        tx_btn.pack(side=tk.LEFT, padx=15)
 
-        # Transaction list preview
-        self.recent_transactions_frame = tk.Frame(recent_frame, bg=self.colors['bg_secondary'])
+        # Recent transactions with chrome styling
+        recent_frame = tk.Frame(frame, bg=self.colors['bg_secondary'],
+                               relief='groove', bd=3)
+        recent_frame.pack(fill=tk.BOTH, expand=True, padx=25, pady=(0, 25))
+
+        recent_title = ttk.Label(recent_frame, text="📈 Recent Transactions",
+                                style='Header.TLabel', background=self.colors['bg_secondary'])
+        recent_title.pack(pady=20)
+
+        # Transaction list preview with enhanced styling
+        self.recent_transactions_frame = tk.Frame(recent_frame, bg=self.colors['bg_panel'],
+                                                relief='sunken', bd=2)
         self.recent_transactions_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
 
         self.update_recent_transactions()
 
     def create_send_frame(self):
-        """Create the send TorCOIN interface."""
+        """Create the send TorCOIN interface with chrome styling."""
         frame = tk.Frame(self.main_container, bg=self.colors['bg_primary'])
         self.frames["send"] = frame
 
-        # Header
-        header_frame = tk.Frame(frame, bg=self.colors['bg_secondary'], height=80)
+        # Header with 3D effect
+        header_frame = tk.Frame(frame, bg=self.colors['bg_secondary'],
+                               relief='raised', bd=4, height=90)
         header_frame.pack(fill=tk.X, pady=(0, 20))
         header_frame.pack_propagate(False)
 
-        title_label = ttk.Label(header_frame, text="Send TorCOIN", style='Title.TLabel')
-        title_label.pack(pady=20)
+        # Add gradient background
+        header_canvas = tk.Canvas(header_frame, height=90, bg=self.colors['bg_secondary'],
+                                 highlightthickness=0)
+        header_canvas.pack(fill=tk.BOTH, expand=True)
+        for i in range(90):
+            color = self._blend_colors(self.colors['accent_primary'], self.colors['bg_secondary'], i/90)
+            header_canvas.create_line(0, i, 2000, i, fill=color)
 
-        # Send form
-        form_frame = tk.Frame(frame, bg=self.colors['bg_secondary'])
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+        title_label = ttk.Label(header_frame, text="🚀 Send TorCOIN", style='Title.TLabel')
+        title_label.pack(pady=25)
 
-        # Recipient address
-        addr_frame = tk.Frame(form_frame, bg=self.colors['bg_secondary'])
-        addr_frame.pack(fill=tk.X, padx=20, pady=20)
+        # Send form with chrome panel
+        form_frame = tk.Frame(frame, bg=self.colors['bg_panel'],
+                             relief='groove', bd=3)
+        form_frame.pack(fill=tk.BOTH, expand=True, padx=25, pady=(0, 20))
 
-        ttk.Label(addr_frame, text="Recipient Address:", style='Header.TLabel').pack(anchor=tk.W, pady=(0, 10))
+        # Recipient address with chrome styling
+        addr_frame = tk.Frame(form_frame, bg=self.colors['bg_panel'])
+        addr_frame.pack(fill=tk.X, padx=25, pady=25)
 
-        self.send_address_entry = tk.Text(addr_frame, height=3, font=('Consolas', 10),
+        ttk.Label(addr_frame, text="📧 Recipient Address:", style='Header.TLabel',
+                 background=self.colors['bg_panel']).pack(anchor=tk.W, pady=(0, 15))
+
+        # Address input with 3D effect
+        addr_container = tk.Frame(addr_frame, bg=self.colors['bg_tertiary'],
+                                 relief='sunken', bd=3)
+        addr_container.pack(fill=tk.X)
+
+        self.send_address_entry = tk.Text(addr_container, height=3, font=('Consolas', 11),
                                         bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
-                                        insertbackground=self.colors['text_primary'])
-        self.send_address_entry.pack(fill=tk.X)
+                                        insertbackground=self.colors['accent_gold'],
+                                        relief='flat', bd=2)
+        self.send_address_entry.pack(fill=tk.BOTH, padx=10, pady=10)
 
-        # Amount
-        amount_frame = tk.Frame(form_frame, bg=self.colors['bg_secondary'])
-        amount_frame.pack(fill=tk.X, padx=20, pady=(0, 20))
+        # Amount with chrome styling
+        amount_frame = tk.Frame(form_frame, bg=self.colors['bg_panel'])
+        amount_frame.pack(fill=tk.X, padx=25, pady=(0, 25))
 
-        ttk.Label(amount_frame, text="Amount (TOR):", style='Header.TLabel').pack(anchor=tk.W, pady=(0, 10))
+        ttk.Label(amount_frame, text="💰 Amount (TOR):", style='Header.TLabel',
+                 background=self.colors['bg_panel']).pack(anchor=tk.W, pady=(0, 15))
 
-        amount_entry_frame = tk.Frame(amount_frame, bg=self.colors['bg_secondary'])
+        amount_entry_frame = tk.Frame(amount_frame, bg=self.colors['bg_panel'])
         amount_entry_frame.pack(fill=tk.X)
 
-        self.send_amount_entry = tk.Entry(amount_entry_frame, font=('Segoe UI', 14),
-                                        bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
-                                        insertbackground=self.colors['text_primary'])
-        self.send_amount_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        # Amount input with 3D styling
+        amount_container = tk.Frame(amount_entry_frame, bg=self.colors['bg_tertiary'],
+                                   relief='sunken', bd=3)
+        amount_container.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
-        ttk.Button(amount_entry_frame, text="MAX", style='Primary.TButton',
-                  command=self.set_max_amount).pack(side=tk.RIGHT, padx=(10, 0))
+        self.send_amount_entry = tk.Entry(amount_container, font=('Segoe UI', 16, 'bold'),
+                                        bg=self.colors['bg_tertiary'], fg=self.colors['accent_gold'],
+                                        insertbackground=self.colors['accent_gold'],
+                                        relief='flat', bd=2)
+        self.send_amount_entry.pack(fill=tk.X, padx=15, pady=10)
+
+        # MAX button with 3D effect
+        max_btn = tk.Button(amount_entry_frame, text="⚡ MAX",
+                           bg=self.colors['warning'], fg=self.colors['bg_primary'],
+                           font=('Segoe UI', 10, 'bold'), relief='raised', bd=3,
+                           activebackground=self.colors['accent_secondary'],
+                           padx=15, pady=8, cursor='hand2',
+                           command=self.set_max_amount)
+        max_btn.pack(side=tk.RIGHT, padx=(15, 0))
+        self._add_3d_effect(max_btn)
 
         # Fee selection
         fee_frame = tk.Frame(form_frame, bg=self.colors['bg_secondary'])
@@ -271,9 +400,23 @@ class TorCOINWallet:
         ttk.Radiobutton(fee_options_frame, text="Fast (0.1 TOR)", variable=self.fee_var,
                        value="fast").pack(side=tk.LEFT)
 
-        # Send button
-        ttk.Button(form_frame, text="🚀 Send TorCOIN", style='Success.TButton',
-                  command=self.send_transaction).pack(pady=20)
+        # Send button with enhanced 3D chrome effect
+        send_container = tk.Frame(form_frame, bg=self.colors['bg_panel'])
+        send_container.pack(pady=30)
+
+        send_button = tk.Button(send_container, text="🚀 SEND TORCOIN",
+                               bg=self.colors['success'], fg=self.colors['bg_primary'],
+                               font=('Segoe UI', 14, 'bold'), relief='raised', bd=5,
+                               activebackground=self.colors['accent_secondary'],
+                               activeforeground=self.colors['text_primary'],
+                               padx=40, pady=15, cursor='hand2',
+                               command=self.send_transaction)
+        send_button.pack()
+        self._add_3d_effect(send_button)
+
+        # Add glow effect
+        glow_frame = tk.Frame(send_container, bg=self.colors['glow_primary'], height=3)
+        glow_frame.pack(fill=tk.X, pady=(10, 0))
 
         # Back button
         ttk.Button(frame, text="← Back to Dashboard", style='Primary.TButton',
@@ -454,17 +597,31 @@ class TorCOINWallet:
                   command=lambda: self.show_frame("dashboard")).pack(pady=(0, 20))
 
     def create_status_bar(self):
-        """Create the status bar at the bottom."""
-        self.status_frame = tk.Frame(self.root, bg=self.colors['bg_secondary'], height=30)
-        self.status_frame.pack(fill=tk.X, side=tk.BOTTOM)
+        """Create the status bar at the bottom with chrome styling."""
+        self.status_frame = tk.Frame(self.root, bg=self.colors['bg_tertiary'],
+                                    relief='ridge', bd=2, height=35)
+        self.status_frame.pack(fill=tk.X, side=tk.BOTTOM, padx=5, pady=5)
         self.status_frame.pack_propagate(False)
 
-        self.status_label = ttk.Label(self.status_frame, text="Ready", style='Primary.TLabel')
-        self.status_label.pack(side=tk.LEFT, padx=10)
+        # Add chrome effect
+        status_canvas = tk.Canvas(self.status_frame, height=35, bg=self.colors['bg_tertiary'],
+                                 highlightthickness=0)
+        status_canvas.pack(fill=tk.BOTH, expand=True)
 
-        self.network_status_label = ttk.Label(self.status_frame, text="Network: Connected",
-                                            style='Primary.TLabel')
-        self.network_status_label.pack(side=tk.RIGHT, padx=10)
+        # Create chrome gradient
+        for i in range(35):
+            color = self._blend_colors(self.colors['bg_tertiary'], self.colors['bg_secondary'], i/35)
+            status_canvas.create_line(0, i, 2000, i, fill=color)
+
+        self.status_label = tk.Label(self.status_frame, text="🔥 Ready",
+                                    bg=self.colors['bg_tertiary'], fg=self.colors['text_primary'],
+                                    font=('Segoe UI', 9, 'bold'))
+        self.status_label.place(x=15, y=8)
+
+        self.network_status_label = tk.Label(self.status_frame, text="🌐 Network: Connected",
+                                           bg=self.colors['bg_tertiary'], fg=self.colors['accent_secondary'],
+                                           font=('Segoe UI', 9))
+        self.network_status_label.place(relx=1.0, x=-15, y=8, anchor='ne')
 
     def show_frame(self, frame_name):
         """Show the specified frame and hide others."""
@@ -858,6 +1015,26 @@ https://www.torcoin.cnet
 Privacy Through Innovation
         """
         messagebox.showinfo("About TorCOIN Wallet", about_text)
+
+    def _blend_colors(self, color1, color2, factor):
+        """Blend two colors together."""
+        # Simple color blending function
+        c1 = tuple(int(color1[i:i+2], 16) for i in (1, 3, 5))
+        c2 = tuple(int(color2[i:i+2], 16) for i in (1, 3, 5))
+
+        blended = tuple(int(c1[i] + (c2[i] - c1[i]) * factor) for i in range(3))
+        return f'#{blended[0]:02x}{blended[1]:02x}{blended[2]:02x}'
+
+    def _add_3d_effect(self, widget):
+        """Add 3D visual effects to buttons."""
+        def on_enter(event):
+            widget.config(relief='raised', bd=6)
+
+        def on_leave(event):
+            widget.config(relief='raised', bd=4)
+
+        widget.bind('<Enter>', on_enter)
+        widget.bind('<Leave>', on_leave)
 
     def on_closing(self):
         """Handle application closing."""
