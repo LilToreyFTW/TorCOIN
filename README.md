@@ -1,6 +1,12 @@
-# TorCOIN Web Server
+# TorCOIN - Privacy-First Digital Currency
 
-A simple web server to host your 3D animated TorCOIN HTML page.
+A complete cryptocurrency platform featuring a professional website, GUI wallet application, and comprehensive server infrastructure.
+
+## 🌐 Live Repositories
+
+- **Main Repository**: https://github.com/LilToreyFTW/TorCOIN
+- **Wallet Repository**: https://github.com/LilToreyFTW/TorCOIN-Wallet
+- **Live Website**: http://www.torcoin.cnet
 
 ## Files
 
