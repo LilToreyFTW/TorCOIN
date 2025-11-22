@@ -41,8 +41,8 @@ class TorCOINWallet:
         # Create GUI
         self.create_styles()
         self.create_menu()
-        self.create_main_interface()
         self.create_status_bar()
+        self.create_main_interface()
 
         # Apply theme
         self.apply_theme()
