@@ -1,13 +1,59 @@
-TorCOIN Wallet v1.0
+TorCOIN Wallet v1.3.0
 Released: November 2024
+
+What's New in v1.3.0:
+• 💳 VISA VIRTUAL CARDS - Real Visa partnership integration
+• 🔐 Card Activation - 2FA verification for card activation
+• 💰 Load Funds - Transfer TorCOIN to card balance instantly
+• 🏦 Bank Integration - Connect bank accounts using Plaid
+• 💳 Bank Transfers - Transfer funds between bank and TorCOIN
+• 🏦 Bank Account Management - View connected bank accounts
+• 💰 Bank Balance Display - Real-time bank account balances
+• 🔄 Seamless Transfers - Bank ↔ TorCOIN wallet transfers
+• 📱 Virtual Card App - Dedicated card management application
+• 🎁 Free Card Generation - AI-powered unique Visa card creation
+• 💳 Card Transactions - Full Visa network simulation
+• ⏰ 10-Year Expiry - Cards automatically expire 10 years from signup
+• 🔄 Card Replacement - Replace cards up to 2 times per month
+• 🤖 INVISIBLE AI - Generates 1 million unique cards daily
+• 🔢 CUSTOM FORMAT - Cards: 8948-XXXX-XXXX-2241
+• ⚡ INSTANT ISSUANCE - Cards from pre-generated secure pool
+
+What's New in v1.1.2:
+• ✅ FULLY IMPLEMENTED - All buttons and tabs now functional
+• 🕐 Live calendar/date-time display in wallet header
+• 📓 Complete Address Book with add/copy functionality
+• 💰 Price Calculator with multiple currencies
+• 🌐 Network Status monitor with real-time updates
+• 📚 Built-in Documentation viewer
+• 🔒 Comprehensive Security Tips guide
+• ℹ️ Detailed About dialog with version info
+• 🎛️ Fully functional Settings panel
+• 🔍 Transaction filtering (All/Sent/Received)
+• 💾 Complete wallet backup/restore system
+• 🖥️ Professional desktop application interface
+
+What's New in v1.1.1:
+• Clean black text theme for better readability
+• Removed weird background effects behind text
+• Clean white backgrounds with no gradients
+• Improved text contrast and legibility
+• Better accessibility for all users
+
+What's New in v1.1.0:
+• Complete UI redesign with modern interface
+• Professional cryptocurrency aesthetic
+
+What's New in v1.0.1:
+• Fixed GUI initialization error
+• Improved startup reliability
 
 What's New in v1.0:
 • Complete GUI wallet interface
-• Send 
+• Send & receive TorCOIN
 • Transaction history
 • Address management
 • Security features
-• Dark theme UI
 • Cross-platform compatibility
 
 System Requirements:

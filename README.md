@@ -226,8 +226,10 @@ The official desktop wallet application for TorCOIN with a modern graphical inte
 
 ### Features
 - **Complete GUI Interface** - User-friendly desktop application
+- **Bank Integration** - Connect bank accounts using Plaid for seamless transfers
 - **Wallet Management** - Create, open, and backup wallets
 - **Send & Receive** - Full transaction capabilities
+- **Bank Transfers** - Transfer funds between bank accounts and TorCOIN wallet
 - **Transaction History** - Complete transaction log with filtering
 - **Address Management** - Generate and manage addresses
 - **Security Features** - Encrypted wallet storage, password protection
@@ -245,6 +247,38 @@ The official desktop wallet application for TorCOIN with a modern graphical inte
 2. Extract to a folder on your computer
 3. Run `Run_TorCOIN_Wallet.bat`
 4. Create a new wallet or import existing
+
+### Bank Integration Setup
+To enable bank connectivity features:
+
+1. **Sign up for Plaid** at https://plaid.com
+2. **Get API credentials** from your Plaid Dashboard
+3. **Update wallet configuration**:
+   - Open `torcoin_wallet.py`
+   - Replace `PLAID_CLIENT_ID = "your_plaid_client_id_here"`
+   - Replace `PLAID_SECRET = "your_plaid_secret_here"`
+   - Set `PLAID_ENV = "sandbox"` (for testing) or `"production"` (for live)
+4. **Install dependencies**: `pip install -r requirements.txt`
+5. **Restart the wallet** to enable bank features
+
+**Note**: Bank integration uses mock data by default. Configure real Plaid credentials for production use.
+
+### Visa Virtual Card Policy
+- **Visa Partnership**: Official TorCOIN Bank Visa partnership for real card functionality
+- **Free Cards**: All Visa virtual cards are completely free to obtain
+- **Activation Required**: Cards must be activated with 2FA verification before use
+- **10-Year Validity**: Cards automatically expire exactly 10 years from the signup date
+- **No Extensions**: Expired cards cannot be renewed or reactivated
+- **Card Replacement**: Users can replace cards up to 2 times per month
+- **Replacement Limit**: Monthly limit resets on the 1st of each month
+- **Daily Limits**: $1,000 maximum per day per card
+- **Monthly Limits**: $5,000 maximum per month per card
+- **Card Format**: All cards follow 8948-XXXX-XXXX-2241 format
+- **Invisible AI**: Background AI generates 1 million unique cards daily
+- **Instant Issuance**: Cards pulled from pre-generated secure pool
+- **Zero Duplicates**: Guaranteed unique card numbers system-wide
+- **Secure Storage**: Card details are encrypted and stored securely
+- **Network Simulation**: Full Visa network transaction simulation
 
 ### Creating Installer
 Run `create_wallet_installer.bat` to create a distributable wallet package for users.

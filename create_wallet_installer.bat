@@ -112,8 +112,19 @@ echo pause
 :: Create version info
 echo 📅 Creating version info...
 (
-echo TorCOIN Wallet v1.0
+echo TorCOIN Wallet v1.3.0
 echo Released: November 2024
+echo.
+echo What's New in v1.3.0:
+echo • 💳 FREE Virtual Debit Cards - Get instant virtual cards
+echo • 🏦 Bank Integration - Connect bank accounts using Plaid
+echo • 💳 Bank Transfers - Transfer funds between bank and TorCOIN
+echo • 🏦 Bank Account Management - View connected bank accounts
+echo • 💰 Bank Balance Display - Real-time bank account balances
+echo • 🔄 Seamless Transfers - Bank ↔ TorCOIN wallet transfers
+echo • 📱 Virtual Card App - Dedicated card management application
+echo • 🎁 Free Card Generation - AI-powered unique card creation
+echo • 💳 Card Transactions - Full send/receive and reporting
 echo.
 echo What's New in v1.0:
 echo • Complete GUI wallet interface
@@ -134,8 +145,8 @@ echo For updates, visit: https://www.torcoin.cnet/downloads
 
 :: Create ZIP archive
 echo 📦 Creating installer package...
-if exist "TorCOIN_Wallet_v1.0.zip" del "TorCOIN_Wallet_v1.0.zip"
-powershell "Compress-Archive -Path 'TorCOIN_Wallet_Installer\*' -DestinationPath 'TorCOIN_Wallet_v1.0.zip' -Force"
+if exist "TorCOIN_Wallet_v1.3.0.zip" del "TorCOIN_Wallet_v1.3.0.zip"
+powershell "Compress-Archive -Path 'TorCOIN_Wallet_Installer\*' -DestinationPath 'TorCOIN_Wallet_v1.3.0.zip' -Force"
 
 echo.
 echo ==================================================
@@ -143,7 +154,7 @@ echo ✅ TORCOIN WALLET INSTALLER CREATED!
 echo ==================================================
 echo.
 echo 📁 Files created in: TorCOIN_Wallet_Installer\
-echo 📦 Archive created: TorCOIN_Wallet_v1.0.zip
+echo 📦 Archive created: TorCOIN_Wallet_v1.3.0.zip
 echo.
 echo 📋 Installer Contents:
 echo • torcoin_wallet.py - Main wallet application
@@ -154,7 +165,7 @@ echo • Uninstall.bat - Uninstaller script
 echo • version.txt - Version information
 echo.
 echo 🌐 Ready for download at:
-echo https://www.torcoin.cnet/downloads/TorCOIN_Wallet_v1.0.zip
+echo https://www.torcoin.cnet/downloads/TorCOIN_Wallet_v1.3.0.zip
 echo.
 echo 📊 Package size: 
 dir /b TorCOIN_Wallet_v1.0.zip | for %%A in (TorCOIN_Wallet_v1.0.zip) do echo %%~zA bytes
