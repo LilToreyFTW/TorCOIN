@@ -153,6 +153,31 @@ Combines both firewall and proxy for maximum protection:
 - Returns to normal internet access
 - Removes all TorCOIN security restrictions
 
+## GitHub Integration
+
+Both repositories are now live and fully synchronized:
+
+- **Main Repository**: https://github.com/LilToreyFTW/TorCOIN
+  - Complete TorCOIN ecosystem
+  - Website, server, security tools
+  - Full project documentation
+
+- **Wallet Repository**: https://github.com/LilToreyFTW/TorCOIN-Wallet
+  - TorCOIN GUI Wallet application
+  - Wallet installer tools
+  - Wallet-specific documentation
+
+### Repository Management
+```bash
+# Push to both repositories
+git push origin master
+git push wallet master
+
+# Check status
+git remote -v
+git status
+```
+
 ## Server Management
 
 ### 🚀 Start Server (24/7 Operation):
